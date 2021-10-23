@@ -5,10 +5,12 @@ from components.address.models import Address
 from components.helpers.property_type import PropertyType
 from components.helpers.estate_type import EstateType
 from components.helpers.orientation import Orientation
+from components.helpers.estate_type import EstateType
 
 
 class Property(models.Model):
     area = models.FloatField("surface", null=False)
+    price = models.FloatField(null=True)
     address = models.ForeignKey(to=Address, on_delete=CASCADE)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
     property_type = models.TextField(
