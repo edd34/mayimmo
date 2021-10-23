@@ -5,7 +5,6 @@ from components.address.models import Address
 from components.helpers.property_type import PropertyType
 from components.helpers.estate_type import EstateType
 from components.helpers.orientation import Orientation
-from components.helpers.estate_type import EstateType
 
 
 class Property(models.Model):

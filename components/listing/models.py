@@ -1,6 +1,5 @@
 from django.db import models
 from components.property.models import Property
-from components.helpers.estate_type import EstateType
 
 
 class Listing(models.Model):
