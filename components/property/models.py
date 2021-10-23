@@ -8,7 +8,7 @@ from components.helpers.orientation import Orientation
 
 
 class Property(models.Model):
-    area = models.FloatField("surface", blank=False, null=False)
+    area = models.FloatField("surface", null=False)
     address = models.ForeignKey(to=Address, on_delete=CASCADE)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
     property_type = models.TextField(
