@@ -12,6 +12,8 @@ class Property(models.Model):
     price = models.FloatField(null=True)
     address = models.ForeignKey(to=Address, on_delete=CASCADE)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=50, null=True)
+    description = models.CharField(max_length=1500, null=True)
     property_type = models.TextField(
         "type de propriété", choices=PropertyType.choices)
     estate_type = models.TextField(
