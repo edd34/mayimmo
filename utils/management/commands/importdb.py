@@ -1,39 +1,43 @@
 from django.core.management.base import BaseCommand
 from django.core.management import call_command
-from components.word.models import Word
-from components.translation.models import Translation
-from components.language.models import Language
-
+from django.contrib.auth.models import User
+from components.address.models import Address
+from components.listing.models import Listing
+from components.property.models import Property
+from utils.management.commands.generate_fake_data import create_rows_faker_address, create_rows_faker_property, create_rows_faker_user
+from django.db import transaction, IntegrityError
 import pandas as pd
 import numpy as np
+from tqdm import tqdm
 
-from utils.parse_dict import get_dict_kibushi, get_dict_mahorais
 
 class Command(BaseCommand):
     help = 'import database'
 
     def handle(self, *args, **kwargs):
-        df = get_dict_mahorais()
-        df1 = get_dict_kibushi()
+        df_address = create_rows_faker_address(
+            50)[["address_1", "city", "zip_code", "longitude", "latitude"]]
+        df_user = create_rows_faker_user(50)
+        df_property = create_rows_faker_property(50)
+        df_address_dict = df_address.to_dict('records')
+        df_user_dict = df_user.to_dict('records')
+        df_property_dict = df_property.to_dict('records')
 
-        mahorais = Language.objects.get_or_create(name="mahorais")
-        francais = Language.objects.get_or_create(name="français")
-        kibushi = Language.objects.get_or_create(name="kibushi")
+        def create_record(index):
+            try:
+                with transaction.atomic():
+                    user = User.objects.create_user(
+                        df_user_dict[index]["username"], password=None)
+                    user.is_superuser = False
+                    user.is_staff = False
+                    address = Address.objects.create(**df_address_dict[index])
+                    df_property_dict[index]["owner"] = user
+                    df_property_dict[index]["address"] = address
+                    property = Property.objects.create(
+                        **df_property_dict[index])
+            except Exception:
+                print("Error", index)
 
-        res = Language.objects.all()
-        print(res.values_list('pk', flat=True))
-
-        def create_translation_mahorais_fr(row):
-            word_mahorais = Word.objects.get_or_create(name=row["mahorais"], language=mahorais[0])
-            word_francais = Word.objects.get_or_create(name=row["français"], language=francais[0])
-            Translation.objects.get_or_create(word_source=word_mahorais[0], language_source=mahorais[0], word_destination=word_francais[0], language_destination=francais[0])
-            Translation.objects.get_or_create(word_source=word_francais[0], language_source=francais[0], word_destination=word_mahorais[0], language_destination=mahorais[0])
-
-        def create_translation_kibushi_fr(row):
-            word_kibushi = Word.objects.get_or_create(name=row["kibushi"], language=kibushi[0])
-            word_francais = Word.objects.get_or_create(name=row["français"], language=francais[0])
-            Translation.objects.get_or_create(word_source=word_kibushi[0], language_source=kibushi[0], word_destination=word_francais[0], language_destination=francais[0])
-            Translation.objects.get_or_create(word_source=word_francais[0], language_source=francais[0], word_destination=word_kibushi[0], language_destination=kibushi[0])
-
-        df.apply(lambda x: create_translation_mahorais_fr(x), axis=1)
-        df1.apply(lambda x: create_translation_kibushi_fr(x), axis=1)
+        print("creating records in db")
+        for i in tqdm(range(len(df_property_dict))):
+            create_record(i)
