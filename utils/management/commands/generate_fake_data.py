@@ -4,9 +4,9 @@ from faker import Faker
 import random
 import os
 from tqdm import tqdm
-
+import time
 fake = Faker(locale='fr_FR')
-
+Faker.seed(int(time.time()))
 nb_data = 50
 
 
