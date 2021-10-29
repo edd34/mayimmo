@@ -5,33 +5,33 @@ import random
 
 fake = Faker(locale='fr_FR')
 
-nb_data = 1
+nb_data = 10
 
-df_address = gpd.read_file('geodata/ADRESSE.shx', encoding='utf-8')
-df_commune = gpd.read_file('geodata/COMMUNE.shx', encoding='utf-8')
 
-res = gpd.sjoin(df_address, df_commune,  predicate='within')
+def create_rows_faker_address(num=nb_data):
+    df_address = gpd.read_file('geodata/ADRESSE.shx', encoding='utf-8')
+    df_commune = gpd.read_file('geodata/COMMUNE.shx', encoding='utf-8')
+    res = gpd.sjoin(df_address, df_commune,  predicate='within')
 
-# apply filters
-res = res[
-    (res["NOM_1"] != res["NOM"])
-]
+    # apply filters
+    res = res[
+        (res["NOM_1"] != res["NOM"])
+    ]
 
-result = []
-for i in range(len(df_commune)):
-    tmp_res = df_commune["NOM"].iloc[i]
-    tmp_result = res[(res["NOM"] == tmp_res)].sample(nb_data)[["NUMERO", "NOM_1", "CODE_POST_left",
+    result = []
+    for i in range(len(df_commune)):
+        tmp_res = df_commune["NOM"].iloc[i]
+        tmp_result = res[(res["NOM"] == tmp_res)].sample(num)[["NUMERO", "NOM_1", "CODE_POST_left",
                                                                "NOM", "geometry", "COTE", "METHODE"]]
-    result.append(tmp_result)
-    # print(tmp_result)
+        result.append(tmp_result)
 
-# pprint(result)
-rdf = gpd.GeoDataFrame(pd.concat(result, ignore_index=True))
-rdf["lon"] = rdf["geometry"].x
-rdf["lat"] = rdf["geometry"].y
-rdf.drop(['geometry', "COTE", "METHODE"], axis=1,
-         inplace=True)
-
+    # pprint(result)
+    rdf = gpd.GeoDataFrame(pd.concat(result, ignore_index=True))
+    rdf["lon"] = rdf["geometry"].x
+    rdf["lat"] = rdf["geometry"].y
+    rdf.drop(['geometry', "COTE", "METHODE"], axis=1,
+             inplace=True)
+    return rdf
 
 
 def create_rows_faker_user(num=nb_data):
@@ -80,9 +80,14 @@ def create_rows_faker_property(num=nb_data):
     return result
 
 
-df_user_faker = pd.DataFrame(create_rows_faker_user(nb_data))
-df_property_faker = pd.DataFrame(create_rows_faker_property(nb_data))
+def export_to_csv(dataframe, file_name=r'export.csv'):
+    dataframe.to_csv(file_name)
 
-final_df = pd.concat([rdf, df_user_faker, df_property_faker], axis=1)
-final_df.to_csv(r'export.csv')
-print(final_df)
+
+if __name__ == '__main__':
+    rdf = create_rows_faker_address(nb_data)
+    df_user_faker = pd.DataFrame(create_rows_faker_user(nb_data))
+    df_property_faker = pd.DataFrame(create_rows_faker_property(nb_data))
+    final_df = pd.concat([rdf, df_user_faker, df_property_faker], axis=1)
+    print(final_df)
+    export_to_csv(final_df)
