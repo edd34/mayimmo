@@ -15,3 +15,5 @@ pygeos==0.10.2
 pyproj==3.2.1
 autopep8==1.6.0
 Rtree==0.9.7
+faker
+tqdm
