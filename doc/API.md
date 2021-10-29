@@ -12,13 +12,6 @@ The base API URL is http://141.94.223.19:8009
 Description : return a JSON containing all properties in the database (**`deprecated`** because it uses a lot a network resources)
 Example : [http://141.94.223.19:8009/property/](http://141.94.223.19:8009/property/)
 
-Examples :
-
-- http://141.94.223.19:8009/paginated-property/
-- http://141.94.223.19:8009/paginated-property/?page=2
-- http://141.94.223.19:8009/paginated-property/?page_size=5
-- http://141.94.223.19:8009/paginated-property/?page=2&page_size=5
-
 #### Example result
 
 ```json
