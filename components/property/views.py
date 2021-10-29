@@ -19,8 +19,18 @@ def add_property(request):
 
 
 @api_view(['GET', 'OPTIONS'])
-def get_property(request):
+def get_paginated_property(request):
     property = Property.objects.all()
+    paginator.page_size = 10
+    paginator.page_query_param = 'page'
+    paginator.page_size_query_param = 'per_page'
     result_page = paginator.paginate_queryset(property, request)
     serializer = PropertySerializer(result_page, many=True)
     return paginator.get_paginated_response(serializer.data)
+
+
+@api_view(['GET', 'OPTIONS'])
+def get_all_property(request):
+    property = Property.objects.all()
+    serializer = PropertySerializer(property, many=True)
+    return JsonResponse(serializer.data, safe=False)
