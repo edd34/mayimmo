@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.core.management import call_command
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from components.address.models import Address
 from components.listing.models import Listing
 from components.property.models import Property
@@ -9,6 +9,7 @@ from django.db import transaction, IntegrityError
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
+User = get_user_model()
 
 
 class Command(BaseCommand):
@@ -27,7 +28,13 @@ class Command(BaseCommand):
             try:
                 with transaction.atomic():
                     user = User.objects.create_user(
-                        df_user_dict[index]["username"], password=None)
+                        email=df_user_dict[index]["email"],
+                        firstname=df_user_dict[index]["firstname"],
+                        lastname=df_user_dict[index]["lastname"],
+                        phone=df_user_dict[index]["phone"],
+                        username=df_user_dict[index]["username"],
+                        password=None
+                    )
                     user.is_superuser = False
                     user.is_staff = False
                     address = Address.objects.create(**df_address_dict[index])

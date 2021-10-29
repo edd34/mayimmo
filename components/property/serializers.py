@@ -1,10 +1,12 @@
 from rest_framework import serializers
 from components.property.models import Property
 from components.address.serializers import AddressSerializer
+from components.users.serializers import UserSerializer
 
 
 class PropertySerializer(serializers.ModelSerializer):
     address = AddressSerializer()
+    owner = UserSerializer()
 
     class Meta:
         model = Property

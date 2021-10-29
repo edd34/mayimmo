@@ -4,6 +4,8 @@ from rest_framework import status
 from rest_framework.parsers import JSONParser
 from components.property.serializers import PropertySerializer
 from components.property.models import Property
+from rest_framework.pagination import PageNumberPagination
+paginator = PageNumberPagination()
 
 
 @api_view(['POST', 'OPTIONS'])
@@ -19,5 +21,6 @@ def add_property(request):
 @api_view(['GET', 'OPTIONS'])
 def get_property(request):
     property = Property.objects.all()
-    serializer = PropertySerializer(property, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    result_page = paginator.paginate_queryset(property, request)
+    serializer = PropertySerializer(result_page, many=True)
+    return paginator.get_paginated_response(serializer.data)
