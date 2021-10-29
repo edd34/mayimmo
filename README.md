@@ -32,20 +32,6 @@ Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the dep
 pip3 install -r requirements.txt
 ```
 
-## Configure environment variables
-
-1. Rename the file .env-example to .env
-2. Fill the variable in .env file
-
-```
-POSTGRES_DB=(database name)
-POSTGRES_USER=(database username)
-POSTGRES_PASSWORD=(database password)
-SECRET=(secret key for django operation)
-CORS_WHITELIST_DOMAIN=(is the host name of the frontend app)
-DJANGO_ENV= (can be dev or prod)
-```
-
 ## Steps when running the program for the first time.
 
 In order to run the backend program, you should follow the steps described below. All commands are run from the root folder.
