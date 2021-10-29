@@ -40,7 +40,7 @@ def create_rows_faker_user(num=nb_data):
                "email": fake.ascii_email(),
                "phone": fake.phone_number(),
                "username": fake.user_name()} for _ in range(17*num)]
-    return output
+    return pd.DataFrame(output)
 
 
 def create_rows_faker_property(num=nb_data):
@@ -77,7 +77,7 @@ def create_rows_faker_property(num=nb_data):
             "dining_room": fake.pybool()
         }
         result.append(output)
-    return result
+    return pd.DataFrame(result)
 
 
 def export_to_csv(dataframe, file_name=r'export.csv'):
@@ -86,8 +86,8 @@ def export_to_csv(dataframe, file_name=r'export.csv'):
 
 if __name__ == '__main__':
     rdf = create_rows_faker_address(nb_data)
-    df_user_faker = pd.DataFrame(create_rows_faker_user(nb_data))
-    df_property_faker = pd.DataFrame(create_rows_faker_property(nb_data))
+    df_user_faker = create_rows_faker_user(nb_data)
+    df_property_faker = create_rows_faker_property(nb_data)
     final_df = pd.concat([rdf, df_user_faker, df_property_faker], axis=1)
     print(final_df)
     export_to_csv(final_df)
