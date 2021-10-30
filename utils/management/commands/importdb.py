@@ -16,8 +16,7 @@ class Command(BaseCommand):
     help = 'import database'
 
     def handle(self, *args, **kwargs):
-        df_address = create_rows_faker_address(
-            50)[["address_1", "city", "zip_code", "longitude", "latitude"]]
+        df_address = create_rows_faker_address(50)
         df_user = create_rows_faker_user(50)
         df_property = create_rows_faker_property(50)
         df_address_dict = df_address.to_dict('records')

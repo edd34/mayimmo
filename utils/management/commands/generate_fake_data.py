@@ -12,11 +12,14 @@ nb_data = 50
 
 def create_rows_faker_address(num=nb_data):
     print("* Reading ADRESSE shapefile")
-    df_address = gpd.read_file(
-        './utils/management/commands/geodata/ADRESSE.shx', encoding='utf-8')
+    address_shx = os.path.join(os.path.dirname(
+        os.path.abspath(__file__)), "geodata/ADRESSE.shx")
+    commune_shx = os.path.join(os.path.dirname(
+        os.path.abspath(__file__)), "geodata/COMMUNE.shx")
+
+    df_address = gpd.read_file(address_shx, encoding='utf-8')
     print("* Reading COMMUNE shapefile")
-    df_commune = gpd.read_file(
-        './utils/management/commands/geodata/COMMUNE.shx', encoding='utf-8')
+    df_commune = gpd.read_file(commune_shx, encoding='utf-8')
     res = gpd.sjoin(df_address, df_commune,  predicate='within')
 
     # apply filters
@@ -42,7 +45,7 @@ def create_rows_faker_address(num=nb_data):
     rdf["latitude"] = rdf["geometry"].y
     rdf.drop(['geometry', "COTE", "METHODE"], axis=1,
              inplace=True)
-    return rdf
+    return rdf[["address_1", "city", "zip_code", "longitude", "latitude"]]
 
 
 def create_rows_faker_user(num=nb_data):
@@ -94,4 +97,19 @@ def create_rows_faker_property(num=nb_data):
 
 
 def export_to_csv(dataframe, file_name=r'export.csv'):
+    print("Exporting to CSV : ", file_name)
     dataframe.to_csv(file_name)
+
+
+def generate_dataset(num=nb_data):
+    df_address = create_rows_faker_address(num)
+    df_user = create_rows_faker_user(num)
+    df_property = create_rows_faker_property(num)
+    df = pd.concat([df_address, df_user, df_property], axis=1)
+    return df
+
+
+if __name__ == "__main__":
+    df_dataset = generate_dataset()
+    export_to_csv(df_dataset)
+    print("Done.")
