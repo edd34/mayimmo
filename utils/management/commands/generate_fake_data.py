@@ -67,6 +67,7 @@ def create_rows_faker_property(num=nb_data):
         output = {
             "area": area,
             "price": price*area,
+            "price_per_area": price,
             "title": fake.sentence(nb_words=10),
             "description": fake.paragraph(nb_sentences=10),
             "property_type": "apartment",

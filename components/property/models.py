@@ -11,6 +11,7 @@ User = get_user_model()
 class Property(models.Model):
     area = models.FloatField("surface", null=False)
     price = models.FloatField(null=True)
+    price_per_area = models.FloatField(null=True)
     address = models.ForeignKey(to=Address, on_delete=CASCADE)
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, null=True)
