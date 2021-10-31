@@ -2,9 +2,10 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.parsers import JSONParser
-from components.property.serializers import PropertySerializer
+from components.property.serializers import PropertySerializer, PropertyFilterSerializer
 from components.property.models import Property
 from rest_framework.pagination import PageNumberPagination
+from django.db.models import Avg, Max, Min, Sum
 paginator = PageNumberPagination()
 
 
@@ -34,3 +35,21 @@ def get_all_property(request):
     property = Property.objects.all()
     serializer = PropertySerializer(property, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(['GET', 'OPTIONS'])
+def get_property_filter(request):
+    query = Property.objects.all()
+    data = query.aggregate(
+        min_area=Min('area'),
+        max_area=Max('area'),
+        avg_area=Avg('area'),
+        min_price=Min('price'),
+        max_price=Max('price'),
+        avg_price=Avg('price'),
+        min_price_per_area=Min('price_per_area'),
+        max_price_per_area=Max('price_per_area'),
+        avg_price_per_area=Avg('price_per_area'),
+    )
+
+    return JsonResponse(data, safe=False)

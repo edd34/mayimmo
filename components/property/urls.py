@@ -11,4 +11,7 @@ urlpatterns = [
     path('add-property/',
          views.add_property,
          name='add-property'),
+    path('get-property-filter/',
+         views.get_property_filter,
+         name='get-property-filter'),
 ]
