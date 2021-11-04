@@ -1,10 +1,12 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.deletion import CASCADE
+
 from components.address.models import Address
-from components.helpers.property_type import PropertyType
 from components.helpers.estate_type import EstateType
 from components.helpers.orientation import Orientation
-from django.contrib.auth import get_user_model
+from components.helpers.property_type import PropertyType
+
 User = get_user_model()
 
 

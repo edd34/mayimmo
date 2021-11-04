@@ -1,11 +1,13 @@
-from django.http import JsonResponse
-from rest_framework.decorators import api_view
-from rest_framework import status
-from rest_framework.parsers import JSONParser
-from components.property.serializers import PropertySerializer
-from components.property.models import Property
-from rest_framework.pagination import PageNumberPagination
 from django.db.models import Avg, Max, Min, Sum
+from django.http import JsonResponse
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.parsers import JSONParser
+
+from components.property.models import Property
+from components.property.serializers import PropertySerializer
+
 paginator = PageNumberPagination()
 
 

@@ -1,11 +1,12 @@
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
 from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
-from components.listing.serializers import ListingSerializer
-from components.property.serializers import PropertySerializer
+
 from components.listing.models import Listing
+from components.listing.serializers import ListingSerializer
 from components.property.models import Property
+from components.property.serializers import PropertySerializer
 
 
 @api_view(['POST', 'OPTIONS'])

@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from components.property.models import Property
+
 from components.address.serializers import AddressSerializer
+from components.property.models import Property
 from components.users.serializers import UserSerializer
 
 

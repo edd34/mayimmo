@@ -1,14 +1,18 @@
-from django.core.management.base import BaseCommand
-from django.core.management import call_command
+import numpy as np
+import pandas as pd
 from django.contrib.auth import get_user_model
+from django.core.management import call_command
+from django.core.management.base import BaseCommand
+from django.db import IntegrityError, transaction
+from tqdm import tqdm
+
 from components.address.models import Address
 from components.listing.models import Listing
 from components.property.models import Property
-from utils.management.commands.generate_fake_data import create_rows_faker_address, create_rows_faker_property, create_rows_faker_user
-from django.db import transaction, IntegrityError
-import pandas as pd
-import numpy as np
-from tqdm import tqdm
+from utils.management.commands.generate_fake_data import (
+    create_rows_faker_address, create_rows_faker_property,
+    create_rows_faker_user)
+
 User = get_user_model()
 
 

@@ -1,10 +1,12 @@
+import os
+import random
+import time
+
 import geopandas as gpd
 import pandas as pd
 from faker import Faker
-import random
-import os
 from tqdm import tqdm
-import time
+
 fake = Faker(locale='fr_FR')
 Faker.seed(int(time.time()))
 nb_data = 50

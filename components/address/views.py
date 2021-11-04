@@ -1,9 +1,10 @@
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
 from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
-from components.address.serializers import AddressSerializer
+
 from components.address.models import Address
+from components.address.serializers import AddressSerializer
 
 
 @api_view(['GET', 'OPTIONS'])

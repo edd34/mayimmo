@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from components.listing.models import Listing
 from components.property.models import Property
 
