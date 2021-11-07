@@ -6,6 +6,7 @@ import geopandas as gpd
 import pandas as pd
 from faker import Faker
 from tqdm import tqdm
+import utm
 
 fake = Faker(locale='fr_FR')
 Faker.seed(int(time.time()))
@@ -43,8 +44,9 @@ def create_rows_faker_address(num=nb_data):
 
     # pprint(result)
     rdf = gpd.GeoDataFrame(pd.concat(result, ignore_index=True))
-    rdf["longitude"] = rdf["geometry"].x
-    rdf["latitude"] = rdf["geometry"].y
+    rdf["latitude"], rdf["longitude"] = utm.to_latlon(
+        rdf["geometry"].x, rdf["geometry"].y, 38, 'L')
+
     rdf.drop(['geometry', "COTE", "METHODE"], axis=1,
              inplace=True)
     return rdf[["address_1", "city", "zip_code", "longitude", "latitude"]]
