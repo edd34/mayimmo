@@ -4,9 +4,9 @@ import time
 
 import geopandas as gpd
 import pandas as pd
+import utm
 from faker import Faker
 from tqdm import tqdm
-import utm
 
 fake = Faker(locale='fr_FR')
 Faker.seed(int(time.time()))
