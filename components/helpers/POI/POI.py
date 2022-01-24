@@ -8,9 +8,9 @@ P3857 = Proj(init="epsg:3857")
 P4326 = Proj(init="epsg:4326")
 
 
-class POi:
+class POI:
     def __init__(self):
-        with open("./components/helpers/POI_helper/mayotte.json", mode="r") as f:
+        with open("./components/helpers/POI/mayotte.json", mode="r") as f:
             self._data_load = geojson.load(f)["elements"]
         self._gdf = gpd.GeoDataFrame(self._data_load, crs="EPSG:4326")
         self._pre_process_data()
